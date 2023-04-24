@@ -1,7 +1,22 @@
 document.addEventListener('DOMContentLoaded', function() {
+    const heroSection = document.querySelector('.hero'); 
+    const alturaHero = heroSection.clientHeight;
+
     const buttons = document.querySelectorAll('[data-tab-button]');
     const questions = document.querySelectorAll('[data-faq-question]');
     
+    //Oculta os elementos do Header
+    window.addEventListener('scroll', function() {
+        const posicaoAtual = window.scrollY;
+
+        if (posicaoAtual < alturaHero) {
+            ocultaElementosHeader();
+        } else {
+            exibeElementosHeader();
+        }
+    })
+    
+    // Seção de atrações, programação das abas
     for (let i = 0; i < buttons.length; i++) {
         buttons[i].addEventListener('click', function (botao) {
             const abaAlvo = botao.target.dataset.tabButton;
@@ -13,10 +28,21 @@ document.addEventListener('DOMContentLoaded', function() {
         })
     }    
 
+    //Seção FAQ, accordion
     for (let i = 0; i < questions.length; i++) {
         questions[i].addEventListener('click', abreOuFechaResposta);
     }    
 })
+
+function ocultaElementosHeader() {
+    const header = document.querySelector('header');
+    header.classList.add('header--is-hidden');
+}
+
+function exibeElementosHeader() {
+    const header = document.querySelector('header');
+    header.classList.remove('header--is-hidden');
+}
 
 function removeBotaoAtivo() {
     const buttons = document.querySelectorAll('[data-tab-button]');
