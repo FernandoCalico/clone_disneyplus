@@ -1,8 +1,8 @@
 const gulp = require('gulp');
 const sass = require('gulp-sass')(require('sass'));
 const imagemin = require('gulp-imagemin');
+const uglify = require('gulp-uglify');
 // const sourcemaps = require('gulp-sourcemaps');
-// const uglify = require('gulp-uglify');
 // const obfuscate = require('gulp-obfuscate');
 
 function styles() {
@@ -16,15 +16,22 @@ function images() {
         .pipe(imagemin())
         .pipe(gulp.dest('./dist/images'));
 }
-// function comprimeJavaScript() {
-//     return gulp.src('./src/scripts/*.js')
-//         .pipe(uglify())
-//         .pipe(obfuscate())
-//         .pipe(gulp.dest('./dist/scripts'))
-// }
 
-exports.default = function() {
-    gulp.watch('./src/styles/*.scss', {ignoreInitial: false} , gulp.parallel(styles))
-    gulp.watch('./src/images/*', {ignoreInitial: false} , gulp.parallel(images));
+function scripts() {
+    return gulp.src('./src/scripts/*.js')
+        .pipe(uglify())
+        // .pipe(obfuscate())
+        .pipe(gulp.dest('./dist/js'))
 }
+
+exports.default = gulp.parallel(styles, images, scripts);
+
+exports.watch = function() {
+    gulp.watch('./src/styles/*.scss', {ignoreInitial: false} , gulp.parallel(styles))
+    gulp.watch('./src/scripts/*.js', {ignoreInitial: false} , gulp.parallel(scripts))
+}
+// exports.default = function() {
+//     gulp.watch('./src/styles/*.scss', {ignoreInitial: false} , gulp.parallel(styles))
+//     gulp.watch('./src/images/*', {ignoreInitial: false} , gulp.parallel(images));
+// }
 
